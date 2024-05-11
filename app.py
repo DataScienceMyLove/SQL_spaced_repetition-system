@@ -3,6 +3,13 @@ import pandas as pd
 import duckdb
 import io
 
+st.write("""
+        # Spaced repetition system for SQL practice
+
+        App designed by DataScienceMyLove
+
+        """)
+
 csv = '''
 beverage,price
 orange juice,2.5
@@ -28,13 +35,20 @@ CROSS JOIN food_items
 
 solution = duckdb.sql(answer).df()
 
+with st.sidebar:
+    option = st.selectbox("How would you like to practice",
+                          ['Joins', 'Aggregations', 'Window Functions'],
+                          index=None,
+                          placeholder='Select theme',
+                          )
+    st.write("You selected", option)
+
 st.header("Enter your code: ")
-query = st.text_area(label="Enter your SQL query:",key="user_input")
+query = st.text_area(label="Enter your SQL query:", key="user_input")
 
 if query:
     result = duckdb.sql(query).df()
     st.dataframe(result)
-
 
 # Creation of tabs
 tab2, tab3 = st.tabs(["Tables", "Solution"])
@@ -48,6 +62,6 @@ with tab2:
     st.dataframe(food_items)
     st.write("expected:")
     st.dataframe(solution)
+
 with tab3:
     st.write(answer)
-
